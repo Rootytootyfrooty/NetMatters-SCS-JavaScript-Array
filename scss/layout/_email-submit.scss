@@ -1,0 +1,65 @@
+.hidden {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    margin: -2px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(100%);
+    border: 0;
+    white-space: nowrap; 
+}
+#form-container {
+    text-align: center;
+    width: 360px;
+    font-size: 20px;
+    @include md {
+        width: 668px;
+    }
+}
+#email-dropdown,
+#add-email input {
+    width: 100%;
+    height: 31px;
+    margin-left: -4px;
+    font-family: "Lora", sans-serif;
+}
+#email-dropdown {
+    width: 361px;
+    color: $color-dark-grey;
+    @include md {
+        width: 670px;
+        margin-left: -2px;
+    }
+    margin-bottom: 15px;
+}
+#add-email {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+#add-email input {
+    margin-left: -2px;
+}
+#email-submit,
+#email,
+#email-dropdown {
+    display: inline-block;
+    min-height: 37px;
+    padding: 8px 10px;
+    font-family: "Lora", sans-serif;
+    font-size: 15px;
+    padding: 5px;
+    border: 1px solid grey;
+    border-radius: 3px;
+}
+.success {
+    box-shadow: inset 2px 2px 2px green;
+}
+.error {
+    box-shadow: inset 2px 2px 2px red,
+    inset -2px -2px 2px red;
+}

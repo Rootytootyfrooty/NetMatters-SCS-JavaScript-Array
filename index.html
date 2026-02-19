@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+            <link rel="stylesheet" href="css/styles.css">
+            <title>JS Array</title>
+        </head>
+        <body>
+            <header><h1>Photo Collection Creator</h1></header>
+            <section id="form-container" class="container">
+                <form id="add-email">
+                    <label for="email" class="hidden">Enter new email address:</label>
+                    <input type="email" name="email" id="email" placeholder="Add new e-mail address">
+                    <button type="submit" id="email-submit">Submit</button>
+                </form>
+                <div id="dropdown-container">
+                    <select id="email-dropdown">
+                    </select>
+                </div>
+            </section>
+            <section id="carousel-sect">
+                <div id="carousel-container" class="container">
+                    <div id="random-photo-carousel">
+                        <div id="slide-one" class="slide slide-default">
+                            <div class="img-wrapper img-wrapper-default">
+                                <img src="https://picsum.photos/1000/800?random=1" alt="placeholder" class="photo random-photo">
+                                <button class="add-photo add-default">Add Photo to Album</button>
+                            </div>
+                            <span class="maximise-photo">&#x1F50D;</span>
+                        </div>
+                        <div id="slide-two" class="slide slide-default">
+                            <div class="img-wrapper img-wrapper-default">
+                                <img src="https://picsum.photos/1000/800?random=2" alt="placeholder" class="photo random-photo">
+                                <button class="add-photo add-default">Add Photo to Album</button>
+                            </div>
+                            <span class="maximise-photo">&#x1F50D;</span>
+                        </div>
+                        <div id="slide-three" class="slide slide-default">
+                            <div class="img-wrapper img-wrapper-default">
+                                <img src="https://picsum.photos/1000/800?random=3" alt="placeholder" class="photo random-photo">
+                                <button class="add-photo add-default">Add Photo to Album</button>
+                            </div>
+                            <span class="maximise-photo">&#x1F50D;</span>
+                        </div>
+                        <div id="slide-four" class="slide slide-default">
+                            <div class="img-wrapper img-wrapper-default">
+                                <img src="https://picsum.photos/1000/800?random=4" alt="placeholder" class="photo random-photo">
+                                <button class="add-photo add-default">Add Photo to Album</button>
+                            </div>
+                            <span class="maximise-photo">&#x1F50D;</span>
+                        </div>
+                        <div id="slide-five" class="slide slide-default">
+                            <div class="img-wrapper img-wrapper-default">
+                                <img src="https://picsum.photos/1000/800?random=5" alt="placeholder" class="photo random-photo">
+                                <button class="add-photo add-default">Add Photo to Album</button>
+                            </div>
+                            <span class="maximise-photo">&#x1F50D;</span>
+                        </div>
+                        <div id="slide-six" class="slide slide-default">
+                            <div class="img-wrapper img-wrapper-default">
+                                <img src="https://picsum.photos/1000/800?random=6" alt="placeholder" class="photo random-photo">
+                                <button class="add-photo add-default">Add Photo to Album</button>
+                            </div>
+                            <span class="maximise-photo">&#x1F50D;</span>
+                        </div>
+                        <div id="slide-seven" class="slide slide-default">
+                            <div class="img-wrapper img-wrapper-default">
+                                <img src="https://picsum.photos/1000/800?random=7" alt="placeholder" class="photo random-photo">
+                                <button class="add-photo add-default">Add Photo to Album</button>
+                            </div>
+                            <span class="maximise-photo">&#x1F50D;</span>
+                        </div>
+                        <div id="slide-eight" class="slide slide-default">
+                            <div class="img-wrapper img-wrapper-default">
+                                <img src="https://picsum.photos/1000/800?random=8" alt="placeholder" class="photo random-photo">
+                                <button class="add-photo add-default">Add Photo to Album</button>
+                            </div>
+                            <span class="maximise-photo">&#x1F50D;</span>
+                        </div>
+                    </div>
+                </div>
+                <button id="randomiser">Generate New Images</button>
+            </section>
+            <section id="album-sect">
+                <div id="album-container" class="container">
+                    <h2>Photo Albums</h2>
+                    <h3>Email Address</h3>                    
+                    <div id="wrapper">
+                        <div id="container">
+                            <div id="album" class="open-book">
+                                <!-- <div id="left-page">
+                                    <div class="album-slide album-slide-default">
+                                        <img src="https://picsum.photos/1000/800?random=10" alt="placeholder" class="album-photo random-photo">
+                                        <span class="maximise-photo">&#x1F50D;</span>
+                                    </div>
+                                    <div class="album-slide album-slide-default">
+                                        <img src="https://picsum.photos/1000/800?random=11" alt="placeholder" class="album-photo random-photo">
+                                        <span class="maximise-photo">&#x1F50D;</span>
+                                    </div>
+                                    <div class="album-slide album-slide-default">
+                                        <img src="https://picsum.photos/1000/800?random=12" alt="placeholder" class="album-photo random-photo">
+                                        <span class="maximise-photo">&#x1F50D;</span>
+                                    </div>
+                                </div>
+                                <div id="right-page">
+                                    <div class="album-slide album-slide-default">
+                                        <img src="https://picsum.photos/1000/800?random=13" alt="placeholder" class="album-photo random-photo">
+                                        <span class="maximise-photo">&#x1F50D;</span>
+                                    </div>
+                                    <div class="album-slide album-slide-default">
+                                        <img src="https://picsum.photos/1000/800?random=14" alt="placeholder" class="album-photo random-photo">
+                                        <span class="maximise-photo">&#x1F50D;</span>
+                                    </div>
+                                    <div class="album-slide album-slide-default">
+                                        <img src="https://picsum.photos/1000/800?random=15" alt="placeholder" class="album-photo random-photo">
+                                        <span class="maximise-photo">&#x1F50D;</span>
+                                    </div>
+                                </div> -->
+                                
+                                <footer>
+                                    <ol id="page-numbers">
+                                        <li>1</li>
+                                        <li>2</li>
+                                    </ol>
+                                </footer>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <script src="js/array.js"></script>
+        </body>
+    </html>
+</html>

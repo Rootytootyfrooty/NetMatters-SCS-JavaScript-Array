@@ -1,0 +1,13 @@
+h1, h2, h3, h4 {
+    color: $color-white;
+    font-family: "Lora", sans-serif;
+    text-align: center;
+}
+p, a, img, select {
+    color: $color-white;
+    font-family: "Cormorant Garamond", sans-serif;
+    font-size: 25px;
+}
+body {
+    background-color: $color-dark-grey;
+}

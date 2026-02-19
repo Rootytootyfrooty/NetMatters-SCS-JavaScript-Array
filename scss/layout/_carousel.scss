@@ -1,0 +1,113 @@
+#carousel-sect {
+    min-height: 100vh;
+    text-align: center;
+}
+.slide {
+    height: 250px;
+    width: 340px;
+    margin: 10px 5px;
+    background-color: $color-white;
+    padding: 20px 10px 40px;
+    box-shadow: -6px 6px 4px darken($color-dark-grey, 20%);
+    img {
+        width: 300px;
+        border: 0px solid white;
+    }
+    .add-default {
+        display: none;
+        font-size: 15px;
+    }
+    button {
+        font-family: "Lora", sans-serif;
+        
+        margin: 5px auto;
+        padding: 5px;
+        border: 1px solid grey;
+        border-radius: 3px;
+    }
+    &:hover {
+        .add-default {
+            display: block;
+        }
+        .maximise-photo {
+            display: inline;
+        }
+        
+    }
+}
+.slide-max {
+    background: transparent;
+    box-shadow: none;
+}
+
+#random-photo-carousel {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+#slide-four, #slide-five, #slide-six, #slide-seven, #slide-eight {
+    display: none;
+}
+@include sm {
+    #slide-four {
+        display: initial;
+    }
+}
+@include lg {
+    #slide-five, #slide-six {
+        display: initial;
+    }
+}
+@include xl {
+    #slide-seven, #slide-eight {
+        display: initial;
+    }
+}
+.img-wrapper-click {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 6;
+}
+.img-wrapper img {
+    transition: transform 1s ease, border-width 1.5s ease;
+}
+.img-wrapper img.random-photo-max {
+    transform: scale(2.5);
+    transition: transform 1s ease;
+}
+.slide img.random-photo-max {
+    border-top: 40px solid $color-white;
+    border-right: 40px solid $color-white;
+    border-bottom: 70px solid $color-white;
+    border-left: 40px solid $color-white;
+}
+.add-large {
+    display: none;
+    position: relative;
+    z-index: 7;
+    bottom: -120px;
+    height: 70px;
+    width: 400px;
+    font-size: 25px;
+}
+.random-photo-max:hover {
+    .add-large {
+        display: block;
+    }
+}
+.maximise-photo {
+    position: relative;
+    display: none;
+    bottom: 70px;
+    left: 135px;
+    margin: 0;
+    padding: 0;
+    z-index: 5;
+}
+.photo {
+    transition: scale 1s ease;
+}
