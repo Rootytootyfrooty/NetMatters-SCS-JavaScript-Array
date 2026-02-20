@@ -18,8 +18,10 @@
     color: #000;
     padding: 2em;
     max-height: 1300px;
+    min-height: 1000px;
     @include xl {
         height: 1500px;
+        column-gap: 150px;
     }
 }
 
@@ -191,11 +193,16 @@
     }
 }
 .album-slide-default {
-    // height: 250px;
-    // width: 340px;
+    height: 250px;
+    width: 340px;
     transform: scale(0.8);
+    margin: auto auto;
+    // max-height: 470px;
+    @include md {
+        transform: scale(0.9);
+    }
     @include xl {
-        transform: scale(1);
+        transform: scale(1.1);
     }
 }
 #wrapper {

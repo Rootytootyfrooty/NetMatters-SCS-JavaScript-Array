@@ -6,6 +6,16 @@ const addButton = document.getElementsByClassName("add-photo");
 const albumSlide = document.getElementsByClassName("album-slide");
 const album = document.getElementById("album");
 
+
+const emailCont = document.getElementById("add-email");
+const email = document.getElementById("email");
+const form = document.getElementById("add-email");
+const emailList = [];
+const dropdown = document.getElementById("email-dropdown");
+const currentEmailDisplay = document.getElementById("current-email");
+
+let currentUser = dropdown.value;
+
 //specific but random images
 
 const randomPhotoBtn = document.getElementById("randomiser");
@@ -20,11 +30,12 @@ function randomisePhotos() {
     }
 }
 
-randomPhotoBtn.addEventListener("click", () => {
-    randomisePhotos();
-});
+
 
 //list of photos in album, not yet tied to a user
+
+
+const users = [];
 const albumList = [];
 
 //changes the src of the img depending on how long the albumList is
@@ -36,6 +47,7 @@ function populateAlbum() {
 }
 for (let i = 0; i < addButton.length; i++) {
     addButton[i].addEventListener("click", (target) => {
+
         albumList.push(photos[i].src);
         
         album.innerHTML += `
@@ -80,11 +92,7 @@ for ( let i = 0; i < photos.length; i++ ) {
 }
 
 //email validation
-const emailCont = document.getElementById("add-email");
-const email = document.getElementById("email");
-const form = document.getElementById("add-email");
-const emailList = [];
-const dropdown = document.getElementById("email-dropdown");
+
 // const users = [];
 let currentEmailValue = "";
 
@@ -104,12 +112,12 @@ const setError = (message) => {
 const setSuccess = () => {
   email.classList.add("success");
   email.classList.remove("error");
-}
+};
 
 const isValidEmail = emailin => {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(emailin).toLowerCase());
-}
+};
 
 const validateEmail = () => {
     if(currentEmailValue.trim === "") {
@@ -122,17 +130,42 @@ const validateEmail = () => {
         setSuccess();
         // user emails added
         emailList.push(currentEmailValue);
-        console.log("You just added: " + currentEmailValue);
-        console.log("the current email list is: " + emailList);
         populateDropdown(currentEmailValue);
     }
-}
+};
 
 form.addEventListener("submit", event => {
     currentEmailValue = email.value.trim();
     event.preventDefault(); 
-    console.log("clicked");
-    validateEmail(currentEmailValue);  
+    validateEmail(currentEmailValue);
+    currentUser = dropdown.value;
+    currentEmailDisplay.textContent = currentUser;
+    addNewUser(currentUser);
+    console.log(users);
 });
 
 randomisePhotos();
+
+dropdown.addEventListener("change", () => {
+    currentUser = dropdown.value;
+    currentEmailDisplay.textContent = currentUser;
+});
+randomPhotoBtn.addEventListener("click", () => {
+    randomisePhotos();
+});
+
+function addNewUser(email) {
+    emailList.length;
+    users.push(email);
+}
+// function addUserPhotos() {
+
+// }
+
+
+// let users = [
+//     {
+//         username: "hi@hi.com",
+//         albumlist: ["123.png", "125.png", "336.png"]
+//     }
+// ]
