@@ -2,6 +2,7 @@ const photos = document.getElementsByClassName("photo");
 const magnifier = document.getElementsByClassName("maximise-photo");
 const slides = document.getElementsByClassName("slide");
 const photoWrapper = document.getElementsByClassName("img-wrapper");
+
 const addButton = document.getElementsByClassName("add-photo");
 const albumSlide = document.getElementsByClassName("album-slide");
 const album = document.getElementById("album");
@@ -15,8 +16,10 @@ const dropdown = document.getElementById("email-dropdown");
 const currentEmailDisplay = document.getElementById("current-email");
 
 let currentUser = dropdown.value;
+let newUser = "";
+let userObjects = {};
 
-//specific but random images
+//specific but random images, so they can be added to email photo arrays
 
 const randomPhotoBtn = document.getElementById("randomiser");
 const albumPhotos = document.getElementsByClassName("album-photo");
@@ -30,35 +33,48 @@ function randomisePhotos() {
     }
 }
 
+album.innerHTML = "";
 
-
-//list of photos in album, not yet tied to a user
-
-
-const users = [];
-const albumList = [];
-
-//changes the src of the img depending on how long the albumList is
-
-function populateAlbum() {
-    for (let i = 0; i < albumList.length; i++) {
-        albumPhotos[i].src = albumList[i];
-    }
-}
-for (let i = 0; i < addButton.length; i++) {
-    addButton[i].addEventListener("click", (target) => {
-
-        albumList.push(photos[i].src);
-        
-        album.innerHTML += `
+//populate album with new added photos (should really change the name)
+function populateAlbum(imgUrl) {
+    album.innerHTML += `
             <div class="album-slide album-slide-default">
                 <img class="album-photo random-photo"
-                   src="${photos[i].src}",
-                    alt="Photo number ${i + 1} in your collection">
+                   src="${imgUrl}",
+                    alt="Photo number  in your collection">
                 <span class="maximise-photo">&#x1F50D;</span>
             </div>
         `;
-        populateAlbum(photos[i].src);
+}
+//populate the album when switching to existing user
+function populateAlbumUser() {
+    for (let i = 0; i < userObjects[currentUser].length; i++) {
+        console.log(userObjects[currentUser][i]);
+        album.innerHTML += `
+            <div class="album-slide album-slide-default">
+                <img class="album-photo random-photo"
+                   src="${userObjects[currentUser][i]}",
+                    alt="Photo number  in your collection">
+                <span class="maximise-photo">&#x1F50D;</span>
+            </div>
+        `;
+    }
+}
+
+
+for (let i = 0; i < addButton.length; i++) {
+    addButton[i].addEventListener("click", (target) => {
+        if (currentUser) {
+            console.log(photos[i].src);
+            if (!userObjects[currentUser]) {
+                userObjects[currentUser] = [];
+            }
+            userObjects[currentUser].push(photos[i].src)
+            populateAlbum(photos[i].src);
+            console.log(userObjects[currentUser].length);
+        } else {
+            setError("Please add or select an email address");
+        }
     });
 }
     
@@ -93,16 +109,11 @@ for ( let i = 0; i < photos.length; i++ ) {
 
 //email validation
 
-// const users = [];
 let currentEmailValue = "";
-
-//function to put the submitted email addresses into the dropdown
-function populateDropdown(emailInput) {
-    dropdown.innerHTML += `<option>${emailInput}</option>`;
-}
 
 //error function (after pressing submit)
 const setError = (message) => {
+    form.reset();
   email.classList.add("error");
   email.classList.remove("success");
   email.placeholder = message;
@@ -128,44 +139,43 @@ const validateEmail = () => {
         setError("Email already added");
     } else {
         setSuccess();
-        // user emails added
+        // user emails added to list to check for duplicates
         emailList.push(currentEmailValue);
-        populateDropdown(currentEmailValue);
+        
     }
 };
 
+//validates submitted email, if valid
 form.addEventListener("submit", event => {
-    currentEmailValue = email.value.trim();
     event.preventDefault(); 
+    currentEmailValue = email.value.trim();
     validateEmail(currentEmailValue);
-    currentUser = dropdown.value;
+    addNewUser(currentEmailValue);
+    currentUser = currentEmailValue;
     currentEmailDisplay.textContent = currentUser;
-    addNewUser(currentUser);
-    console.log(users);
+    album.innerHTML ="";
+    populateAlbumUser();
+    form.reset();
 });
 
 randomisePhotos();
 
 dropdown.addEventListener("change", () => {
+    album.innerHTML = "";
     currentUser = dropdown.value;
     currentEmailDisplay.textContent = currentUser;
+    populateAlbumUser();
 });
+
+function addNewUser(user) {
+    if (!userObjects[user]) {
+        userObjects[user] = [];
+    }
+    const option = document.createElement("option");
+    option.value = user;
+    option.textContent= user;
+    dropdown.appendChild(option);
+}
 randomPhotoBtn.addEventListener("click", () => {
     randomisePhotos();
 });
-
-function addNewUser(email) {
-    emailList.length;
-    users.push(email);
-}
-// function addUserPhotos() {
-
-// }
-
-
-// let users = [
-//     {
-//         username: "hi@hi.com",
-//         albumlist: ["123.png", "125.png", "336.png"]
-//     }
-// ]
