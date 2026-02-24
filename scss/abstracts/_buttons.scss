@@ -1,0 +1,25 @@
+//generic button styling
+
+button {
+    font-family: "Lora", sans-serif;
+    margin: 5px auto;
+    padding: 5px;
+    border: 1px solid grey;
+    border-radius: 3px;
+}
+
+//remove photo from album
+
+.album-slide {
+    .remove-default {
+    display: none; 
+    }
+    &:hover {
+        .remove-default {
+            display: block;
+        }
+        .maximise-photo {
+            display: inline;
+        }
+    }
+}

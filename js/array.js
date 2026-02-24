@@ -4,8 +4,10 @@ const slides = document.getElementsByClassName("slide");
 const photoWrapper = document.getElementsByClassName("img-wrapper");
 
 const addButton = document.getElementsByClassName("add-photo");
+
 const albumSlide = document.getElementsByClassName("album-slide");
 const album = document.getElementById("album");
+const albumPhoto = document.getElementsByClassName("album-photo");
 
 
 const emailCont = document.getElementById("add-email");
@@ -25,11 +27,34 @@ const randomPhotoBtn = document.getElementById("randomiser");
 const albumPhotos = document.getElementsByClassName("album-photo");
 
 function rNG() {
-    return Math.floor( Math.random() * 650 ) + 1;
+    return Math.floor( Math.random() * 1080 ) + 1;
 }
-function randomisePhotos() {
+//There's ~1,000 images that are 1,000pm by 1,000px
+//But some of them don't exist any more and just 404
+//check to see if RNG link image actually loads/exists, if not, tries again
+function checkImage(image) {
+    return new Promise(resolve =>{
+        const testImage = new Image();
+        const randomID = `https://picsum.photos/id/${rNG()}/1000`;
+
+        testImage.onload = function() {
+            resolve(randomID);
+        }
+        testImage.onerror = function() {
+            resolve(checkImage());
+        }
+        testImage.src = randomID;
+    });
+}
+//async function so that all photos are generated at once instead of in sequence.
+async function randomisePhotos() {
+    const promises = [];
     for (let i = 0; i < 8; i++) {
-        photos[i].src = `https://picsum.photos/id/${rNG()}/1000/800`;
+        promises.push(checkImage(photos[i]));
+    }
+    const urls = await Promise.all(promises);
+    for (let i = 0; i < 8; i++) {
+        photos[i].src = urls[i]
     }
 }
 
@@ -40,45 +65,71 @@ function populateAlbum(imgUrl) {
     album.innerHTML += `
             <div class="album-slide album-slide-default">
                 <img class="album-photo random-photo"
-                   src="${imgUrl}",
-                    alt="Photo number  in your collection">
-                <span class="maximise-photo">&#x1F50D;</span>
+                   src="${imgUrl}"
+                    alt="${imgUrl}">
+                <button class="remove-photo remove-default">Remove Photo from Album</button>
             </div>
+            <span class="maximise-photo">&#x1F50D;</span>
         `;
+
+        const removeButton = document.getElementsByClassName("remove-photo");
+
+    for (let i = 0; i < removeButton.length; i++) {
+    removeButton[i].addEventListener("click", () => {
+            console.log(currentUser.indexOf(photos[i].src));
+            console.log("clicked" + photos[i].src);
+        });
+    }
 }
 //populate the album when switching to existing user
 function populateAlbumUser() {
+    let html = "";
     for (let i = 0; i < userObjects[currentUser].length; i++) {
         console.log(userObjects[currentUser][i]);
-        album.innerHTML += `
-            <div class="album-slide album-slide-default">
-                <img class="album-photo random-photo"
-                   src="${userObjects[currentUser][i]}",
-                    alt="Photo number  in your collection">
-                <span class="maximise-photo">&#x1F50D;</span>
-            </div>
+        html += `
+<div class="album-slide album-slide-default">
+    <img class="album-photo random-photo"
+        src="${userObjects[currentUser][i]}"
+        alt="${userObjects[currentUser][i]}">
+    <button class="remove-photo remove-default">Remove Photo from Album</button>
+    <span class="maximise-photo">&#x1F50D;</span>
+</div>
         `;
+    }
+    album.innerHTML = html;
+
+    const removeButton = document.getElementsByClassName("remove-photo");
+
+    for (let i = 0; i < removeButton.length; i++) {
+    removeButton[i].addEventListener("click", () => {
+            console.log(indexOf(photos[i].src));
+            console.log("clicked");
+        });
     }
 }
 
-
+//add photo button
 for (let i = 0; i < addButton.length; i++) {
-    addButton[i].addEventListener("click", (target) => {
-        if (currentUser) {
-            console.log(photos[i].src);
-            if (!userObjects[currentUser]) {
-                userObjects[currentUser] = [];
+    addButton[i].addEventListener("click", function () {
+            if (currentUser) {
+                console.log(photos[i].src);
+                if (!userObjects[currentUser]) {
+                    userObjects[currentUser] = [];
+                }
+                userObjects[currentUser].push(photos[i].src);
+                populateAlbum(photos[i].src);
+                console.log(userObjects[currentUser].length);
+            } else {
+                setError("Please add or select an email address");
             }
-            userObjects[currentUser].push(photos[i].src)
-            populateAlbum(photos[i].src);
-            console.log(userObjects[currentUser].length);
-        } else {
-            setError("Please add or select an email address");
-        }
-    });
+        });
 }
-    
-
+//remove button
+// function addDeleteButtons() {
+//     for (let i = 0; i < removeButton.length; i++) {
+        
+//     }
+// }
 
 // for loop to maximise images on click
 for ( let i = 0; i < photos.length; i++ ) {
@@ -170,11 +221,11 @@ dropdown.addEventListener("change", () => {
 function addNewUser(user) {
     if (!userObjects[user]) {
         userObjects[user] = [];
-    }
-    const option = document.createElement("option");
-    option.value = user;
-    option.textContent= user;
-    dropdown.appendChild(option);
+        const option = document.createElement("option");
+        option.value = user;
+        option.textContent= user;
+        dropdown.appendChild(option);
+    } 
 }
 randomPhotoBtn.addEventListener("click", () => {
     randomisePhotos();

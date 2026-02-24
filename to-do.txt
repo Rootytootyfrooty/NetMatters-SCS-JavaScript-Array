@@ -1,0 +1,14 @@
+<b>To-do</b>
+    *Add error popup and functionality
+
+<b>Users</b>
+    *Add persistent storage so albums and users remain after refresh
+    *Add delete user function
+
+<b>Random Photos</b>
+    *Add promise for image loading
+
+<b>Photo Album</b>
+    *add delete photo from album button
+    *add pages for album and add page control
+    *add maximise functionality to album photos

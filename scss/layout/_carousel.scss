@@ -1,7 +1,10 @@
+//random photos were originally going to be a carousel.
+//I changed my mind, now it's a grid, but I was in too deep with the names so I didn't change them
 #carousel-sect {
     min-height: 100vh;
     text-align: center;
 }
+//random photo slides
 .slide {
     height: 360px;
     width: 360px;
@@ -9,7 +12,6 @@
     background-color: $color-white;
     padding: 20px 10px 40px;
     box-shadow: -6px 6px 4px darken($color-dark-grey, 20%);
-    // transition: background-color 0.3s ease;
     img {
         width: 300px;
         border-top: 20px solid $color-white;
@@ -21,14 +23,7 @@
         display: none;
         font-size: 15px;
     }
-    button {
-        font-family: "Lora", sans-serif;
-        
-        margin: 5px auto;
-        padding: 5px;
-        border: 1px solid grey;
-        border-radius: 3px;
-    }
+    
     &:hover {
         .add-default {
             display: block;
@@ -39,15 +34,7 @@
         
     }
 }
-.slide-max {
-    // background: transparent;
-    box-shadow: none;
-    background-color: rgba(0, 0, 0, 0);
-}
-.slide-default {
-    padding: 0;
-    background-color: $color-white;
-}
+
 #random-photo-carousel {
     display: flex;
     flex-wrap: wrap;
@@ -55,6 +42,17 @@
     justify-content: center;
     margin: 0 auto;
 }
+
+//js controlled classes for maximising images
+.slide-max {
+    box-shadow: none;
+    background-color: rgba(0, 0, 0, 0);
+}
+.slide-default {
+    padding: 0;
+    background-color: $color-white;
+}
+
 #slide-four, #slide-five, #slide-six, #slide-seven, #slide-eight {
     display: none;
 }
@@ -73,12 +71,14 @@
         display: initial;
     }
 }
-
+//wrapper around img because if the whole slide moves then the grid goes funny
+//also so I can have different transform transitions on wrapper vs img
+//because you can't target the various types of transform
 .img-wrapper-default {
     height: auto;
     width: auto;
-    
 }
+
 .img-wrapper-click {
     position: absolute;
     top: 50%;
@@ -87,6 +87,7 @@
     z-index: 6;
     opacity: 1;
 }
+//image itself on maximise
 .img-wrapper img {
     transition: transform 1s ease, border-width 1.5s ease;
     opacity: 1;
@@ -103,6 +104,7 @@
 
     transition: transform 1s ease;
 }
+
 .slide img.random-photo-max {
     border-top: 40px solid $color-white;
     border-right: 40px solid $color-white;
@@ -110,6 +112,7 @@
     border-left: 40px solid $color-white;
     opacity: 1;
 }
+//add photo to album button, disappears on maximise but appears on hover
 .add-large {
     display: none;
     position: relative;

@@ -1,0 +1,19 @@
+//eventual error popups on failed email address add
+
+#popup {
+    background-color: white;
+}
+
+.popup-hidden {
+    opacity: 0;   
+}
+.popup-error {
+    opacity: 1;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 12;
+    width: 80vw;
+    height: 200px;
+}
