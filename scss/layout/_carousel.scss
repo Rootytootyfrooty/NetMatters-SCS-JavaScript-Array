@@ -80,8 +80,13 @@
 }
 
 .img-wrapper-click {
-    position: absolute;
-    top: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 400px;
+    position: fixed;
+    top: calc(50% + 30px);
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 6;
@@ -93,34 +98,49 @@
     opacity: 1;
 }
 .img-wrapper img.random-photo-max {
-    transform: scale(1.1);
+    z-index: 20;
+    transform: scale(1.4);
     opacity: 1;
+    @include xs {
+        transform: scale(1.9);
+    }
     @include sm {
-        transform: scale(2);
+        transform: scale(2.5);
     }
     @include md {
-        transform: scale(2.7);
+        transform: scale(2.9);
     }
 
     transition: transform 1s ease;
 }
 
 .slide img.random-photo-max {
-    border-top: 40px solid $color-white;
-    border-right: 40px solid $color-white;
-    border-bottom: 70px solid $color-white;
-    border-left: 40px solid $color-white;
+    border-top: 20px solid $color-white;
+    border-right: 20px solid $color-white;
+    border-bottom: 40px solid $color-white;
+    border-left: 20px solid $color-white;
     opacity: 1;
 }
 //add photo to album button, disappears on maximise but appears on hover
 .add-large {
-    display: none;
     position: relative;
-    z-index: 7;
-    bottom: -120px;
-    height: 70px;
-    width: 400px;
-    font-size: 25px;
+    z-index: 21;
+    bottom: -20px;
+    height: 35px;
+    width: 200px;
+    font-size: 15px;
+    @include xs {
+        font-size: 18px;
+        bottom: -80px;
+        height: 40px;
+        width: 226px;
+    }
+    @include md {
+        font-size: 25px;
+        bottom: -220px;
+        height: 70px;
+        width: 400px;
+    }
 }
 .random-photo-max:hover {
     .add-large {

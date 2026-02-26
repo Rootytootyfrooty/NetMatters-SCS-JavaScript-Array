@@ -1,11 +1,18 @@
 * {
     box-sizing: border-box;
 }
-
+$screen-xs: 550px;
 $screen-sm: 750px;
 $screen-md: 823px;
 $screen-lg: 1235px;
 $screen-xl: 1645px;
+
+@mixin xs {
+    @media (min-width: #{$screen-xs}) {
+        @content; 
+        }
+}
+
 
 @mixin sm {
     @media (min-width: #{$screen-sm}) {

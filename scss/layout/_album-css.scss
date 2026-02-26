@@ -2,10 +2,9 @@
 
 
 #container {
-    float: left;
     padding: 1em;
     width: 100%;
-    margin-left: -16px;
+    // margin-left: -16px;
     
 }
 
@@ -13,6 +12,10 @@
 
 /*** OPEN BOOK ***/
 .open-book {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     background: #fff;
     box-shadow: rgba(0,0,0,0.5) 0 1em 3em;
     color: #000;
@@ -33,9 +36,9 @@
     }
 }
 
-.open-book * {
-    position: relative;
-}
+// .open-book * {
+//     position: relative;
+// }
 
 .open-book footer * {
     font: 700 1em/1.25 'Playfair Display', sans-serif;
@@ -184,28 +187,29 @@
 //picture in album
 
 .album-slide {
+    display: flex;
+    flex-direction: column;
     transition: width 1s ease, height 1s ease;
     margin: 10px 5px;
     background-color: $color-white;
     padding: 20px 10px 40px;
     box-shadow: -6px 6px 4px darken($color-dark-grey, 10%);
+    justify-content: center;
+    align-items: center;
     @include md {
             // width: 45%;
         }
     img {
-        width: 95%;
+        width: 80%;
         transition: width 1s ease, height 1s ease;
-        // @include md {
-        //     width: 45%;
-        // }
     }
 }
 .album-slide-default {
-    height: 250px;
+    // height: 250px;
     width: 340px;
     transform: scale(0.8);
-    margin: auto auto;
-    // max-height: 470px;
+    // margin: auto auto;
+    max-height: 470px;
     @include md {
         transform: scale(0.9);
     }
@@ -229,14 +233,12 @@
     }
     
 }
-.album-slide-default {
-    display: flex;
-    flex-wrap: wrap;
-    max-width: 296px;
-    @include lg {
-        max-width: 450px;
-    }
-}
+// .album-slide-default {
+//     // display: flex;
+//     // flex-wrap: wrap;
+//     max-width: 296px;
+    
+// }
 @include md{
     #left-page {
         margin-right: 20px;

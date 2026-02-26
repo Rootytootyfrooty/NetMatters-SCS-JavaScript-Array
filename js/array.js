@@ -62,27 +62,40 @@ async function randomisePhotos() {
 album.innerHTML = "";
 
 //populate album with newly added photos (should really change the name)
-function populateAlbum(imgUrl, indexP) {
-    album.insertAdjacentHTML("beforeend",  `
-            <div class="album-slide album-slide-default" data-index="${indexP}">
-                <img class="album-photo random-photo"
-                   src="${imgUrl}"
-                    alt="${imgUrl}">
-                <button class="remove-photo remove-default">Remove Photo from Album</button>
-            </div>
-            <span class="maximise-photo">&#x1F50D;</span>
-        `);
-    //remove button functionality for newly added photos
-        const slideList = album.querySelectorAll(".album-slide");
-        const newSlide = slideList[slideList.length - 1];
-        const removeButton = newSlide.querySelector(".remove-photo");
+function populateAlbum(imgUrl) {
+    userObjects[currentUser].push(imgUrl);
+    populateAlbumUser();
+    // album.insertAdjacentHTML("beforeend",  `
+    //         <div class="album-slide album-slide-default" data-index="${indexP}">
+    //             <img class="album-photo random-photo"
+    //                src="${imgUrl}"
+    //                 alt="${imgUrl}">
+    //             <button class="remove-photo remove-default">Remove Photo from Album</button>
+    //         </div>
+    //         <span class="maximise-photo">&#x1F50D;</span>
+    //     `);
+    // //remove button functionality for newly added photos
+    //     const slideList = album.querySelectorAll(".album-slide");
+    //     const newSlide = slideList[slideList.length - 1];
+    //     const removeButton = newSlide.querySelector(".remove-photo");
 
-        removeButton.addEventListener("click", () => { 
-            const index = parseInt(newSlide.dataset.index);
-            slideList[index].remove();
-            userObjects[currentUser].splice(index, 1);
-        });
+    //     removeButton.addEventListener("click", () => { 
+    //         const index = parseInt(newSlide.dataset.index);
+    //         slideList[index].remove();
+    //         userObjects[currentUser].splice(index, 1);
+    //     });
 }
+
+//function for delete
+
+album.addEventListener("click", (e) => {
+    if (!e.target.classList.contains("remove-photo")) return;
+    const slide = e.target.closest(".album-slide");
+    const index = parseInt(slide.dataset.index);
+    userObjects[currentUser].splice(index, 1);
+    populateAlbumUser();
+    storeUsers();
+});
 
 
 //populate the album when switching to existing user
@@ -101,31 +114,27 @@ function populateAlbumUser() {
     }
     album.innerHTML = html;
 //remove button functionality added when album populated switching users
-    const removeButton = document.getElementsByClassName("remove-photo");
+    // const removeButton = document.getElementsByClassName("remove-photo");
 
-    const slideList = album.querySelectorAll(".album-slide");
-    for (let i = 0; i < removeButton.length; i++) {
-        removeButton[i].addEventListener("click", () => {
-            const index = parseInt(albumSlide[0].dataset.index);
-            slideList[index].remove();
-            });
-        }
+    // const slideList = album.querySelectorAll(".album-slide");
+    // for (let i = 0; i < removeButton.length; i++) {
+    //     removeButton[i].addEventListener("click", () => {
+    //         const index = parseInt(albumSlide[0].dataset.index);
+    //         slideList[index].remove();
+    //         });
+    //     }
 }
 
 //add photo button
 
 for (let i = 0; i < addButton.length; i++) {
     addButton[i].addEventListener("click", function () {
-        if (currentUser) {
-                if (!userObjects[currentUser]) {
-                    userObjects[currentUser] = [];
-                }
-                userObjects[currentUser].push(photos[i].src);
-                const photoIndex = userObjects[currentUser].length - 1;
-                populateAlbum(photos[i].src, photoIndex);
-            } else {
+        if (!currentUser) {
                 setError("Please add or select an email address");
-            }
+                return
+        }
+        populateAlbum(photos[i].src);
+        storeUsers();
         });
 }
 

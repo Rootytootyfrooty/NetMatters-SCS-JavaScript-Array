@@ -64,29 +64,23 @@
     inset -2px -2px 2px red;
 }
 #current-email {
-    position: relative;
-    margin: 0 auto;
-    top: 60px;
-    color: $color-dark-grey;
-    z-index: 13;
-    width: $box-width;
+    // position: relative;
+    // margin: 0 auto;
+    // top: 60px;
+    // color: $color-dark-grey;
+    z-index: 3;
+    font-size: 25px;
+    // width: $box-width;
     text-align: center;
     padding: 10px;
     text-wrap: wrap;
     @include md {
-        top: 150px;
-        left: -175px;
-        font-size: 25px;
-    }
-    @include lg {
-        width: 540px;
-        font-size: 30px;
-        left: -280px;
-    }
-    @include xl {
-        top: 175px;
         font-size: 40px;
-        left: -360px;
-        width: 720px;
     }
+    // @include lg {
+    //     font-size: 30px;
+    // }
+    // @include xl {
+    //     font-size: 40px;
+    // }
 }
