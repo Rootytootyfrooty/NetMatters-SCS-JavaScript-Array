@@ -2,7 +2,7 @@
 
 button {
     font-family: "Lora", sans-serif;
-    margin: 5px auto;
+    margin: 0 auto;
     padding: 5px;
     border: 1px solid grey;
     border-radius: 3px;
@@ -12,7 +12,7 @@ button {
 
 .album-slide {
     .remove-default {
-    display: none; 
+    display: block;
     }
     &:hover {
         .remove-default {

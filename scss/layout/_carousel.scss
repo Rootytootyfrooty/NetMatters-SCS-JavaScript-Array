@@ -6,8 +6,8 @@
 }
 //random photo slides
 .slide {
-    height: 360px;
-    width: 360px;
+    height: $box-width;
+    width: $box-width;
     margin: 10px 5px;
     background-color: $color-white;
     padding: 20px 10px 40px;

@@ -16,6 +16,7 @@ const form = document.getElementById("add-email");
 const emailList = [];
 const dropdown = document.getElementById("email-dropdown");
 const currentEmailDisplay = document.getElementById("current-email");
+const errorDisplay = document.getElementById("popup");
 
 let currentUser = dropdown.value;
 let newUser = "";
@@ -29,9 +30,9 @@ const albumPhotos = document.getElementsByClassName("album-photo");
 function rNG() {
     return Math.floor( Math.random() * 1080 ) + 1;
 }
-//There's ~1,000 images that are 1,000pm by 1,000px
+//There's ~1,000 images that are 1,000px by 1,000px
 //But some of them don't exist any more and just 404
-//check to see if RNG link image actually loads/exists, if not, tries again
+//checks to see if RNG link image actually loads/exists, if not, tries again
 function checkImage(image) {
     return new Promise(resolve =>{
         const testImage = new Image();
@@ -60,34 +61,36 @@ async function randomisePhotos() {
 
 album.innerHTML = "";
 
-//populate album with new added photos (should really change the name)
-function populateAlbum(imgUrl) {
-    album.innerHTML += `
-            <div class="album-slide album-slide-default">
+//populate album with newly added photos (should really change the name)
+function populateAlbum(imgUrl, indexP) {
+    album.insertAdjacentHTML("beforeend",  `
+            <div class="album-slide album-slide-default" data-index="${indexP}">
                 <img class="album-photo random-photo"
                    src="${imgUrl}"
                     alt="${imgUrl}">
                 <button class="remove-photo remove-default">Remove Photo from Album</button>
             </div>
             <span class="maximise-photo">&#x1F50D;</span>
-        `;
+        `);
+    //remove button functionality for newly added photos
+        const slideList = album.querySelectorAll(".album-slide");
+        const newSlide = slideList[slideList.length - 1];
+        const removeButton = newSlide.querySelector(".remove-photo");
 
-        const removeButton = document.getElementsByClassName("remove-photo");
-
-    for (let i = 0; i < removeButton.length; i++) {
-    removeButton[i].addEventListener("click", () => {
-            console.log(currentUser.indexOf(photos[i].src));
-            console.log("clicked" + photos[i].src);
+        removeButton.addEventListener("click", () => { 
+            const index = parseInt(newSlide.dataset.index);
+            slideList[index].remove();
+            userObjects[currentUser].splice(index, 1);
         });
-    }
 }
+
+
 //populate the album when switching to existing user
 function populateAlbumUser() {
     let html = "";
     for (let i = 0; i < userObjects[currentUser].length; i++) {
-        console.log(userObjects[currentUser][i]);
         html += `
-<div class="album-slide album-slide-default">
+<div class="album-slide album-slide-default" data-index="${i}">
     <img class="album-photo random-photo"
         src="${userObjects[currentUser][i]}"
         alt="${userObjects[currentUser][i]}">
@@ -97,39 +100,34 @@ function populateAlbumUser() {
         `;
     }
     album.innerHTML = html;
-
+//remove button functionality added when album populated switching users
     const removeButton = document.getElementsByClassName("remove-photo");
 
+    const slideList = album.querySelectorAll(".album-slide");
     for (let i = 0; i < removeButton.length; i++) {
-    removeButton[i].addEventListener("click", () => {
-            console.log(indexOf(photos[i].src));
-            console.log("clicked");
-        });
-    }
+        removeButton[i].addEventListener("click", () => {
+            const index = parseInt(albumSlide[0].dataset.index);
+            slideList[index].remove();
+            });
+        }
 }
 
 //add photo button
+
 for (let i = 0; i < addButton.length; i++) {
     addButton[i].addEventListener("click", function () {
-            if (currentUser) {
-                console.log(photos[i].src);
+        if (currentUser) {
                 if (!userObjects[currentUser]) {
                     userObjects[currentUser] = [];
                 }
                 userObjects[currentUser].push(photos[i].src);
-                populateAlbum(photos[i].src);
-                console.log(userObjects[currentUser].length);
+                const photoIndex = userObjects[currentUser].length - 1;
+                populateAlbum(photos[i].src, photoIndex);
             } else {
                 setError("Please add or select an email address");
             }
         });
 }
-//remove button
-// function addDeleteButtons() {
-//     for (let i = 0; i < removeButton.length; i++) {
-        
-//     }
-// }
 
 // for loop to maximise images on click
 for ( let i = 0; i < photos.length; i++ ) {
@@ -162,12 +160,25 @@ for ( let i = 0; i < photos.length; i++ ) {
 
 let currentEmailValue = "";
 
+//error popup function
+
+function errorPopup(message) {
+    errorDisplay.classList.add("popup-error");
+    errorDisplay.classList.remove("popup-default");
+    errorDisplay.textContent = message;
+    setTimeout(() => {
+        errorDisplay.classList.remove("popup-error");
+        errorDisplay.classList.add("popup-default");
+    }, 3000);
+}
+
 //error function (after pressing submit)
 const setError = (message) => {
     form.reset();
   email.classList.add("error");
   email.classList.remove("success");
   email.placeholder = message;
+  errorPopup(message);
 };
 
 // success function (after pressing submit)
@@ -203,8 +214,9 @@ form.addEventListener("submit", event => {
     validateEmail(currentEmailValue);
     addNewUser(currentEmailValue);
     currentUser = currentEmailValue;
-    currentEmailDisplay.textContent = currentUser;
+    currentEmailDisplay.textContent = currentUser + "'s Photo Album";
     album.innerHTML ="";
+    storeUsers();
     populateAlbumUser();
     form.reset();
 });
@@ -213,11 +225,11 @@ randomisePhotos();
 
 dropdown.addEventListener("change", () => {
     album.innerHTML = "";
-    currentUser = dropdown.value;
-    currentEmailDisplay.textContent = currentUser;
+    setCurrentUser(dropdown.value);
     populateAlbumUser();
 });
 
+//adds new user using input email address if not duplicate and adds a dropdown option
 function addNewUser(user) {
     if (!userObjects[user]) {
         userObjects[user] = [];
@@ -225,8 +237,43 @@ function addNewUser(user) {
         option.value = user;
         option.textContent= user;
         dropdown.appendChild(option);
+        currentEmailDisplay.textContent = user + "'s Photo Album";
     } 
+    dropdown.value = user;
+    //makes sure the new user is now the current selection in the dropdown menu
+    dropdown.dispatchEvent(new Event("change"));
 }
 randomPhotoBtn.addEventListener("click", () => {
     randomisePhotos();
+});
+
+
+//locally store userObjects (i.e. user emails and image arrays) so info stays on refresh
+function storeUsers() {
+    localStorage.setItem("users", JSON.stringify(userObjects));
+}
+//retrieve user data from local storage, parses from JSON
+function retrieveUsers() {
+    return JSON.parse(localStorage.getItem("users")) || {};
+}
+
+function setCurrentUser(user) {
+    if (!user || user.trim === "") return;
+    currentUser = user;
+    currentEmailDisplay.textContent = currentUser + "'s Photo Album";
+    storeUsers();
+}
+
+//gets and sets after page refresh
+window.addEventListener("load", () => {
+    userObjects = retrieveUsers();
+    const emails = Object.keys(userObjects);
+        for ( let i = 0; i < emails.length; i++) {
+            const option = document.createElement("option");
+            option.value = emails[i];
+            option.textContent= emails[i];
+            dropdown.appendChild(option);
+        }
+    setCurrentUser(emails[0]);
+    populateAlbumUser();
 });
