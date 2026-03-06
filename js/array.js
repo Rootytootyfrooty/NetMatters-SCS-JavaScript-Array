@@ -22,6 +22,57 @@ let currentUser = dropdown.value;
 let newUser = "";
 let userObjects = {};
 
+let photosPerPage = 6;
+let currentPage = 1;
+const prevPageBtn = document.getElementById("previous-page");
+const nextPageBtn = document.getElementById("next-page");
+
+//set photos per page depending on viewport
+const screenWidthMd = window.matchMedia("(max-width: 823px)");
+
+function setMaxPages() {
+    if (screenWidthMd.matches) {
+        photosPerPage = 3;
+    } else {
+        photosPerPage = 6;
+    }
+}
+setMaxPages(screenWidthMd);
+window.onresize = setMaxPages(screenWidthMd);
+// window.addEventListener("resize", () => {
+//     setMaxPages(screenWidthMd);
+// });
+
+// screenWidthMd.addEventListener("change", function() {
+//     setMaxPages(screenWidthMd);
+// });
+
+//change album pages
+prevPageBtn.addEventListener("click", () => {
+    console.log("previous page");
+    if (currentPage > 0) {
+        currentPage--;
+        populateAlbumUser();
+    }
+});
+
+function updatePagination() {
+    const totalPages = getTotalPages();
+
+    // prevPageBtn.style.display = currentPage > 0 ? "block" : "none";
+    // nextPageBtn.style.display = currentPage < totalPages - 1 ? "block" : "none";
+
+}
+
+nextPageBtn.addEventListener("click", () => {
+    console.log("next page");
+    if (currentPage < getTotalPages() - 1) {
+        currentPage++;
+        populateAlbumUser();
+    }
+});
+
+
 //specific but random images, so they can be added to email photo arrays
 
 const randomPhotoBtn = document.getElementById("randomiser");
@@ -59,70 +110,72 @@ async function randomisePhotos() {
     }
 }
 
-album.innerHTML = "";
+// album.innerHTML = "";
 
 //populate album with newly added photos (should really change the name)
 function populateAlbum(imgUrl) {
+    if (!currentUser) return;
     userObjects[currentUser].push(imgUrl);
-    populateAlbumUser();
-    // album.insertAdjacentHTML("beforeend",  `
-    //         <div class="album-slide album-slide-default" data-index="${indexP}">
-    //             <img class="album-photo random-photo"
-    //                src="${imgUrl}"
-    //                 alt="${imgUrl}">
-    //             <button class="remove-photo remove-default">Remove Photo from Album</button>
-    //         </div>
-    //         <span class="maximise-photo">&#x1F50D;</span>
-    //     `);
-    // //remove button functionality for newly added photos
-    //     const slideList = album.querySelectorAll(".album-slide");
-    //     const newSlide = slideList[slideList.length - 1];
-    //     const removeButton = newSlide.querySelector(".remove-photo");
-
-    //     removeButton.addEventListener("click", () => { 
-    //         const index = parseInt(newSlide.dataset.index);
-    //         slideList[index].remove();
-    //         userObjects[currentUser].splice(index, 1);
-    //     });
-}
-
-//function for delete
-
-album.addEventListener("click", (e) => {
-    if (!e.target.classList.contains("remove-photo")) return;
-    const slide = e.target.closest(".album-slide");
-    const index = parseInt(slide.dataset.index);
-    userObjects[currentUser].splice(index, 1);
+    currentPage = Math.floor(userObjects[currentUser].length / photosPerPage);
+    // currentPage = getTotalPages() -1;
     populateAlbumUser();
     storeUsers();
+}
+
+// delete functionality
+
+album.addEventListener("click", (e) => {
+    if (e.target.classList.contains("album-photo")) {
+        const max = e.target.closest(".album-photo");
+        if (e.target.classList.contains("album-photo-default")) {
+            max.classList.add("album-photo-max");
+            max.classList.remove("album-photo-default");
+        } else {
+            max.classList.remove("album-photo-max");
+            max.classList.add("album-photo-default");
+        }
+
+        } else if (e.target.classList.contains("remove-photo")) {
+            const slide = e.target.closest(".album-slide");
+            const index = parseInt(slide.dataset.index);
+            userObjects[currentUser].splice(index, 1);
+            const maxPage = getTotalPages() -1;
+                if (currentPage > maxPage) {
+                    currentPage = Math.max(0, maxPage);
+                }
+            populateAlbumUser();
+            storeUsers();
+        }
 });
 
 
 //populate the album when switching to existing user
 function populateAlbumUser() {
+    const userPhotos = userObjects[currentUser] || [];
+    const start  = currentPage * photosPerPage;
+    const end = start + photosPerPage;
+    const visiblePhotos = userPhotos.slice(start, end);
     let html = "";
-    for (let i = 0; i < userObjects[currentUser].length; i++) {
+
+    for (let i = 0; i < visiblePhotos.length; i++) {
         html += `
-<div class="album-slide album-slide-default" data-index="${i}">
-    <img class="album-photo random-photo"
-        src="${userObjects[currentUser][i]}"
-        alt="${userObjects[currentUser][i]}">
+<div class="album-slide album-slide-default" data-index="${start + i}">
+    <img class="album-photo album-photo-default"
+        src="${visiblePhotos[i]}"
+        alt="${visiblePhotos[i]}">
     <button class="remove-photo remove-default">Remove Photo from Album</button>
-    <span class="maximise-photo">&#x1F50D;</span>
+    <span class="maximise-album-photo">&#x1F50D;</span>
 </div>
         `;
     }
-    album.innerHTML = html;
-//remove button functionality added when album populated switching users
-    // const removeButton = document.getElementsByClassName("remove-photo");
+    const photoContainer = document.getElementById("photo-container");
+    photoContainer.innerHTML = html;
+    updatePagination();
+}
 
-    // const slideList = album.querySelectorAll(".album-slide");
-    // for (let i = 0; i < removeButton.length; i++) {
-    //     removeButton[i].addEventListener("click", () => {
-    //         const index = parseInt(albumSlide[0].dataset.index);
-    //         slideList[index].remove();
-    //         });
-    //     }
+function getTotalPages() {
+    const totalPhotos = userObjects[currentUser]?.length || 0;
+    return Math.ceil(totalPhotos / photosPerPage);
 }
 
 //add photo button
@@ -138,7 +191,7 @@ for (let i = 0; i < addButton.length; i++) {
         });
 }
 
-// for loop to maximise images on click
+// for loop to maximise random images on click
 for ( let i = 0; i < photos.length; i++ ) {
     photos[i].addEventListener("click", (event) => {
         if (event.target.classList.contains("random-photo")) {
@@ -224,7 +277,7 @@ form.addEventListener("submit", event => {
     addNewUser(currentEmailValue);
     currentUser = currentEmailValue;
     currentEmailDisplay.textContent = currentUser + "'s Photo Album";
-    album.innerHTML ="";
+    // album.innerHTML ="";
     storeUsers();
     populateAlbumUser();
     form.reset();
@@ -233,7 +286,8 @@ form.addEventListener("submit", event => {
 randomisePhotos();
 
 dropdown.addEventListener("change", () => {
-    album.innerHTML = "";
+    currentPage = 0;
+    // album.innerHTML = "";
     setCurrentUser(dropdown.value);
     populateAlbumUser();
 });
@@ -274,15 +328,34 @@ function setCurrentUser(user) {
 }
 
 //gets and sets after page refresh
+// window.addEventListener("DOMContentLoaded", () => {
+//     userObjects = retrieveUsers();
+//     const emails = Object.keys(userObjects);
+//         for ( let i = 0; i < emails.length; i++) {
+//             const option = document.createElement("option");
+//             option.value = emails[i];
+//             option.textContent= emails[i];
+//             dropdown.appendChild(option);
+//         }
+//     setCurrentUser(emails[0]);
+//     currentEmailDisplay.textContent = currentUser + "'s Photo Album";
+//     populateAlbumUser();
+// });
+
 window.addEventListener("load", () => {
     userObjects = retrieveUsers();
     const emails = Object.keys(userObjects);
-        for ( let i = 0; i < emails.length; i++) {
+    for ( let i = 0; i < emails.length; i++) {
             const option = document.createElement("option");
             option.value = emails[i];
             option.textContent= emails[i];
             dropdown.appendChild(option);
         }
-    setCurrentUser(emails[0]);
-    populateAlbumUser();
+    if (emails.length > 0) {
+        currentUser = emails[0];
+        currentPage = 0;
+        currentEmailDisplay.textContent = currentUser + "'s Photo Album";
+        populateAlbumUser();
+
+    }
 });

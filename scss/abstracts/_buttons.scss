@@ -12,14 +12,15 @@ button {
 
 .album-slide {
     .remove-default {
-    display: block;
+        margin-top: 15px;
+        opacity: 0;
     }
     &:hover {
         .remove-default {
-            display: block;
+            opacity: 1;
         }
-        .maximise-photo {
-            display: inline;
+        .maximise-album-photo {
+            opacity: 1;
         }
     }
 }
