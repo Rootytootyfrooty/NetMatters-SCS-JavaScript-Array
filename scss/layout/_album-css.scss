@@ -1,19 +1,19 @@
 //found some css online for a book, below is a blend of code
 
 
-#container {
-    padding: 1em;
-    width: 100%;
-}
+// #container {
+//     padding: 1em;
+//     width: 100%;
+// }
 
 /*** OPEN BOOK ***/
 .open-book {
     background: #fff;
     box-shadow: rgba(0,0,0,0.5) 0 1em 3em;
     color: #000;
-    width: $box-width;
+    max-width: 90vw;
         margin-right: 0;
-        margin-left: -16px;
+        // margin-left: -16px;
     @include md {
         width: 720px;
         margin-left: -6px;
@@ -140,8 +140,12 @@
     box-shadow: -6px 6px 4px darken($color-dark-grey, 10%);
     justify-content: center;
     align-items: center;
-    width: 250px;
-    height: 275px;
+        width: 225px;
+        height: 250px;
+    @include md {
+        width: 250px;
+        height: 275px;
+    }
     img {
         max-width: 90%;
         max-height: 90%;
@@ -208,9 +212,10 @@
     grid-template-columns: repeat(1, minmax(0, 1fr));
     grid-template-rows: repeat(3, minmax(0, 1fr));
     padding: 20px 10px 0;
-    height: 100vh;
+    height: 800px;
     justify-items: center;
     @include md {
+        height: 900px;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         grid-template-rows: repeat(3, minmax(0, 1fr));
         gap: 10px 5px;

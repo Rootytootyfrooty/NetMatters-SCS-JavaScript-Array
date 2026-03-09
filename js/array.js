@@ -176,8 +176,11 @@ function getTotalPages() {
 for (let i = 0; i < addButton.length; i++) {
     addButton[i].addEventListener("click", function () {
         if (!currentUser) {
-                setError("Please add or select an email address");
-                return
+            setError("Please add or select an email address");
+            return false;
+        } if (userObjects[currentUser].includes(photos[i].src)) {
+            setError("Image already added to album") ;
+            return false;
         }
         populateAlbum(photos[i].src);
         storeUsers();
@@ -257,6 +260,7 @@ const validateEmail = (emailValue) => {
         return false;
     } if (emailValue in userObjects) {
         setError("Email already added");
+        form.reset();
         return false;
     } if (emailValue.length > 50) {
         setError("E-mail exceeds character limit: 50");
@@ -271,7 +275,7 @@ const validateEmail = (emailValue) => {
 form.addEventListener("submit", event => {
     event.preventDefault(); 
     currentEmailValue = email.value.trim();
-    if (!validateEmail(currentEmailValue)) {
+    if (!validateEmail(currentEmailValue.toLowerCase())) {
         return;
     }
     addNewUser(currentEmailValue);
@@ -306,6 +310,41 @@ function addNewUser(user) {
 }
 randomPhotoBtn.addEventListener("click", () => {
     randomisePhotos();
+});
+
+
+//delete user (future functionality)
+
+const tempDeleteError = (message) => {
+  errorPopup(message);
+};
+
+
+const deleteUserBtn = document.getElementById("delete-user");
+const deletePopup = document.getElementById("popup-delete");
+const confirmDelete = document.getElementById("confirm-delete");
+const cancelDelete = document.getElementById("cancel-delete");
+
+deleteUserBtn.addEventListener("click", () => {
+    deleteUserBtn.classList.add("delete-btn-hidden");
+    deleteUserBtn.classList.remove("delete-btn-default");
+    deletePopup.classList.add("popup-delete-show");
+    deletePopup.classList.remove("popup-delete-default");
+});
+
+cancelDelete.addEventListener("click", () => {
+    deleteUserBtn.classList.remove("delete-btn-hidden");
+    deleteUserBtn.classList.add("delete-btn-default");
+    deletePopup.classList.remove("popup-delete-show");
+    deletePopup.classList.add("popup-delete-default");
+});
+
+confirmDelete.addEventListener("click", () => {
+    deleteUserBtn.classList.remove("delete-btn-hidden");
+    deleteUserBtn.classList.add("delete-btn-default");
+    deletePopup.classList.remove("popup-delete-show");
+    deletePopup.classList.add("popup-delete-default");
+    tempDeleteError("Sorry, an error occured");
 });
 
 

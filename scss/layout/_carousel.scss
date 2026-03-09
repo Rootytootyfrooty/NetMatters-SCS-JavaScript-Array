@@ -1,7 +1,7 @@
 //random photos were originally going to be a carousel.
 //I changed my mind, now it's a grid, but I was in too deep with the names so I didn't change them
 #carousel-sect {
-    min-height: 100vh;
+    min-height: 900px;
     text-align: center;
 }
 //random photo slides
@@ -53,11 +53,11 @@
     background-color: $color-white;
 }
 
-#slide-four, #slide-five, #slide-six, #slide-seven, #slide-eight {
+#slide-three, #slide-four, #slide-five, #slide-six, #slide-seven, #slide-eight {
     display: none;
 }
 @include sm {
-    #slide-four {
+    #slide-three, #slide-four {
         display: initial;
     }
 }
@@ -105,12 +105,11 @@
         transform: scale(1.9);
     }
     @include sm {
-        transform: scale(2.5);
+        transform: scale(2.3);
     }
-    @include md {
-        transform: scale(2.9);
-    }
-
+    // @include md {
+    //     transform: scale(2.4);
+    // }
     transition: transform 1s ease;
 }
 
@@ -136,15 +135,21 @@
         height: 40px;
         width: 226px;
     }
+    @include sm {
+        font-size: 18px;
+        bottom: -130px;
+        height: 40px;
+        width: 226px;
+    }
     @include md {
         font-size: 25px;
-        bottom: -220px;
+        bottom: -125px;
         height: 70px;
-        width: 400px;
+        width: 350px;
     }
+   
 }
 .img-wrapper-click:hover {
-
     .add-large {
         opacity: 1;
     }
@@ -161,4 +166,7 @@
 .photo {
     transition: scale 1s ease;
     opacity: 1;
+    &:hover {
+        cursor: pointer;
+    }
 }

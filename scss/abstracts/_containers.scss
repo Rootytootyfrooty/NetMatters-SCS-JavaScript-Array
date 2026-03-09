@@ -6,7 +6,7 @@
 $box-width: 360px;
 
 .container-box {
-    width: $box-width;
+    max-width: 90vw;
     @include md {
         width: 720px;
     }

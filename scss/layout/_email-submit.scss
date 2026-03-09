@@ -26,7 +26,6 @@
     font-family: "Lora", sans-serif;
 }
 #email-dropdown {
-    width: 361px;
     color: $color-dark-grey;
     @include md {
         width: 670px;
@@ -73,4 +72,42 @@
     @include md {
         font-size: 40px;
     }
+}
+
+//delete user popup
+
+#popup-delete {
+    width: $box-width;
+    background-color: white;
+    padding: 5px;
+    text-align: center;
+    margin: 2px auto;
+}
+.popup-delete-default {
+    display: none;
+}
+
+.popup-delete-show {
+    display: block;
+}
+#you-sure {
+    padding: 5px;
+    color: black;
+}
+//set to none for now while I work out the functionality
+.delete-btn-default {
+ display: none;
+}
+
+.delete-btn-hidden {
+    display: none;
+}
+#confirm-delete {
+    background-color: rgb(241, 88, 88);
+    color: rgb(95, 4, 4);
+}
+#confirm-delete,
+#cancel-delete {
+    width: 60px;
+    margin: 5px 10px;
 }
