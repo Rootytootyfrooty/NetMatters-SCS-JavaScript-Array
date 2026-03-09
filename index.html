@@ -9,10 +9,10 @@
             <title>Photo Collection</title>
         </head>
         <body>
-            <div id="popup" class="popup-hidden"></div>
+            <div id="popup" class="popup-hidden"><div id="popup-text"></div></div>
             <header><h1>Photo Collection Creator</h1></header>
             <section id="form-container" class="container">
-                <form id="add-email">
+                <form novalidate id="add-email">
                     <label for="email" class="hidden">Enter new email address:</label>
                     <input type="email" name="email" id="email" placeholder="Add new e-mail address">
                     <button type="submit" id="email-submit">Submit</button>
@@ -92,9 +92,12 @@
                         <div id="container">
                             <h3 id="current-email"></h3>                    
                             <div id="album" class="open-book">
-                                <div id="photo-container"></div>
+                                <div id="photo-container" class="container-box"></div>
+                                <div id="album-footer" class="container-box">
                                 <button id="previous-page" class="page-btn">Prev</button>
+                                <span id="current-page"></span>
                                 <button id="next-page" class="page-btn">Next</button>
+                                </div>
                             </div>
                         </div>
                     </div>

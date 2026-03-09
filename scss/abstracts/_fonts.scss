@@ -11,3 +11,13 @@ p, a, img, select {
 body {
     background-color: $color-dark-grey;
 }
+h1 {
+    font-size: 35px;
+    padding: 40px 0;
+    @include sm {
+        font-size: 45px;
+    }
+    @include md {
+        font-size: 75px;
+    }
+}

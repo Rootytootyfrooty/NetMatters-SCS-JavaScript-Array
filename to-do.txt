@@ -1,11 +1,16 @@
 <b>To-do</b>
 
 <b>Popups</b>
-    *Fully style error popup and functionality
+    *Fully style error popups
 
 <b>Users</b>
-    *Add delete user function
+    >>>*Add delete user function
 
+<b>Random photos</b>
+    *Stop duplicate random photos
+    *Maximise transition looks bad
 <b>Photo Album</b>
-    *add pages for album and add page control
-    *add maximise functionality to album photos
+    *update number of album pages on resize
+
+<b>General</b>
+    *Fix styling and layout issues

@@ -64,23 +64,13 @@
     inset -2px -2px 2px red;
 }
 #current-email {
-    // position: relative;
-    // margin: 0 auto;
-    // top: 60px;
-    // color: $color-dark-grey;
+    // margin-right: -16px;
     z-index: 3;
     font-size: 25px;
-    // width: $box-width;
     text-align: center;
     padding: 10px;
     text-wrap: wrap;
     @include md {
         font-size: 40px;
     }
-    // @include lg {
-    //     font-size: 30px;
-    // }
-    // @include xl {
-    //     font-size: 40px;
-    // }
 }

@@ -17,6 +17,7 @@ const emailList = [];
 const dropdown = document.getElementById("email-dropdown");
 const currentEmailDisplay = document.getElementById("current-email");
 const errorDisplay = document.getElementById("popup");
+const errorDisplayText = document.getElementById("popup-text");
 
 let currentUser = dropdown.value;
 let newUser = "";
@@ -26,46 +27,38 @@ let photosPerPage = 6;
 let currentPage = 1;
 const prevPageBtn = document.getElementById("previous-page");
 const nextPageBtn = document.getElementById("next-page");
+const currentPageDisplay = document.getElementById("current-page");
 
 //set photos per page depending on viewport
 const screenWidthMd = window.matchMedia("(max-width: 823px)");
+const screenWidthXl = window.matchMedia("(min-width: 1645px)");
 
 function setMaxPages() {
     if (screenWidthMd.matches) {
         photosPerPage = 3;
+    } else if (screenWidthXl.matches) {
+        photosPerPage = 12;
     } else {
         photosPerPage = 6;
     }
 }
-setMaxPages(screenWidthMd);
-window.onresize = setMaxPages(screenWidthMd);
-// window.addEventListener("resize", () => {
-//     setMaxPages(screenWidthMd);
-// });
 
-// screenWidthMd.addEventListener("change", function() {
-//     setMaxPages(screenWidthMd);
-// });
+setMaxPages();
+
+window.addEventListener('resize', function(){
+  setMaxPages();
+  populateAlbumUser();
+});
 
 //change album pages
 prevPageBtn.addEventListener("click", () => {
-    console.log("previous page");
     if (currentPage > 0) {
         currentPage--;
         populateAlbumUser();
     }
 });
 
-function updatePagination() {
-    const totalPages = getTotalPages();
-
-    // prevPageBtn.style.display = currentPage > 0 ? "block" : "none";
-    // nextPageBtn.style.display = currentPage < totalPages - 1 ? "block" : "none";
-
-}
-
 nextPageBtn.addEventListener("click", () => {
-    console.log("next page");
     if (currentPage < getTotalPages() - 1) {
         currentPage++;
         populateAlbumUser();
@@ -110,14 +103,12 @@ async function randomisePhotos() {
     }
 }
 
-// album.innerHTML = "";
 
 //populate album with newly added photos (should really change the name)
 function populateAlbum(imgUrl) {
     if (!currentUser) return;
     userObjects[currentUser].push(imgUrl);
     currentPage = Math.floor(userObjects[currentUser].length / photosPerPage);
-    // currentPage = getTotalPages() -1;
     populateAlbumUser();
     storeUsers();
 }
@@ -168,13 +159,15 @@ function populateAlbumUser() {
 </div>
         `;
     }
+    getTotalPages();
+    
     const photoContainer = document.getElementById("photo-container");
     photoContainer.innerHTML = html;
-    updatePagination();
 }
 
 function getTotalPages() {
     const totalPhotos = userObjects[currentUser]?.length || 0;
+    currentPageDisplay.textContent = `Page: ${currentPage + 1} / ${Math.ceil(totalPhotos / photosPerPage)}`;
     return Math.ceil(totalPhotos / photosPerPage);
 }
 
@@ -227,7 +220,7 @@ let currentEmailValue = "";
 function errorPopup(message) {
     errorDisplay.classList.add("popup-error");
     errorDisplay.classList.remove("popup-default");
-    errorDisplay.textContent = message;
+    errorDisplayText.textContent = message;
     setTimeout(() => {
         errorDisplay.classList.remove("popup-error");
         errorDisplay.classList.add("popup-default");
@@ -236,10 +229,8 @@ function errorPopup(message) {
 
 //error function (after pressing submit)
 const setError = (message) => {
-    form.reset();
   email.classList.add("error");
   email.classList.remove("success");
-  email.placeholder = message;
   errorPopup(message);
 };
 
@@ -247,6 +238,7 @@ const setError = (message) => {
 const setSuccess = () => {
   email.classList.add("success");
   email.classList.remove("error");
+  email.placeholder = "Add new e-mail address";
 };
 
 const isValidEmail = emailin => {
@@ -254,18 +246,24 @@ const isValidEmail = emailin => {
   return re.test(String(emailin).toLowerCase());
 };
 
-const validateEmail = () => {
-    if(currentEmailValue.trim === "") {
+const validateEmail = (emailValue) => {
+    if(emailValue === "") {
+        console.log("error1");
         setError("Please enter an email address");
-    } else if (!isValidEmail(currentEmailValue.trim())) {
+        return false;
+    } if (!isValidEmail(emailValue)) {
         setError("Please enter a valid email address");
-    } else if (emailList.includes(currentEmailValue)){
+        console.log("error2");
+        return false;
+    } if (emailValue in userObjects) {
         setError("Email already added");
+        return false;
+    } if (emailValue.length > 50) {
+        setError("E-mail exceeds character limit: 50");
+        return false;
     } else {
         setSuccess();
-        // user emails added to list to check for duplicates
-        emailList.push(currentEmailValue);
-        
+        return true;
     }
 };
 
@@ -273,11 +271,12 @@ const validateEmail = () => {
 form.addEventListener("submit", event => {
     event.preventDefault(); 
     currentEmailValue = email.value.trim();
-    validateEmail(currentEmailValue);
+    if (!validateEmail(currentEmailValue)) {
+        return;
+    }
     addNewUser(currentEmailValue);
     currentUser = currentEmailValue;
     currentEmailDisplay.textContent = currentUser + "'s Photo Album";
-    // album.innerHTML ="";
     storeUsers();
     populateAlbumUser();
     form.reset();
@@ -287,7 +286,6 @@ randomisePhotos();
 
 dropdown.addEventListener("change", () => {
     currentPage = 0;
-    // album.innerHTML = "";
     setCurrentUser(dropdown.value);
     populateAlbumUser();
 });
@@ -328,19 +326,6 @@ function setCurrentUser(user) {
 }
 
 //gets and sets after page refresh
-// window.addEventListener("DOMContentLoaded", () => {
-//     userObjects = retrieveUsers();
-//     const emails = Object.keys(userObjects);
-//         for ( let i = 0; i < emails.length; i++) {
-//             const option = document.createElement("option");
-//             option.value = emails[i];
-//             option.textContent= emails[i];
-//             dropdown.appendChild(option);
-//         }
-//     setCurrentUser(emails[0]);
-//     currentEmailDisplay.textContent = currentUser + "'s Photo Album";
-//     populateAlbumUser();
-// });
 
 window.addEventListener("load", () => {
     userObjects = retrieveUsers();

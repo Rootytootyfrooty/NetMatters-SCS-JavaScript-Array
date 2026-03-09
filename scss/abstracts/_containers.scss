@@ -4,3 +4,16 @@
     margin: 0 auto;
 }
 $box-width: 360px;
+
+.container-box {
+    width: $box-width;
+    @include md {
+        width: 720px;
+    }
+    @include lg {
+        width: 1080px;
+    }
+    @include xl {
+        width: 1440px;
+    }
+}
